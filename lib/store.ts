@@ -1,5 +1,9 @@
 import { promises as fs } from "fs";
 import path from "path";
+import type { Priority } from "./priority";
+
+export type { Priority } from "./priority";
+export { sortByPriority } from "./priority";
 
 export type Todo = {
   id: string;
@@ -7,6 +11,7 @@ export type Todo = {
   dueDate: string | null;
   completed: boolean;
   createdAt: string;
+  priority: Priority;
 };
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -23,10 +28,10 @@ function seedTodos(): Todo[] {
   };
   const now = new Date().toISOString();
   return [
-    { id: "t1", title: "週報を提出する", dueDate: day(-2), completed: false, createdAt: now },
-    { id: "t2", title: "リリースノートをレビューする", dueDate: day(0), completed: false, createdAt: now },
-    { id: "t3", title: "検証環境のライブラリを更新する", dueDate: day(7), completed: false, createdAt: now },
-    { id: "t4", title: "朝会の議事録を共有する", dueDate: null, completed: true, createdAt: now },
+    { id: "t1", title: "週報を提出する", dueDate: day(-2), completed: false, createdAt: now, priority: "high" },
+    { id: "t2", title: "リリースノートをレビューする", dueDate: day(0), completed: false, createdAt: now, priority: "medium" },
+    { id: "t3", title: "検証環境のライブラリを更新する", dueDate: day(7), completed: false, createdAt: now, priority: "low" },
+    { id: "t4", title: "朝会の議事録を共有する", dueDate: null, completed: true, createdAt: now, priority: "medium" },
   ];
 }
 
@@ -50,7 +55,7 @@ export async function listTodos(): Promise<Todo[]> {
   return load();
 }
 
-export async function addTodo(title: string, dueDate: string | null): Promise<Todo> {
+export async function addTodo(title: string, dueDate: string | null, priority: Priority = "medium"): Promise<Todo> {
   const todos = await load();
   const todo: Todo = {
     id: Math.random().toString(36).slice(2, 10),
@@ -58,6 +63,7 @@ export async function addTodo(title: string, dueDate: string | null): Promise<To
     dueDate,
     completed: false,
     createdAt: new Date().toISOString(),
+    priority,
   };
   todos.push(todo);
   await save(todos);
