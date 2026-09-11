@@ -61,8 +61,8 @@ export default function Home() {
   let summaryText = `${doneCount} / ${todos.length} 件完了`;
 
   const visible = todos.filter((t) => {
-    if (filter === "active") return t.completed;
-    if (filter === "done") return !t.completed;
+    if (filter === "active") return !t.completed;
+    if (filter === "done") return t.completed;
     return true;
   });
 

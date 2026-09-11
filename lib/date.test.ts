@@ -1,20 +1,34 @@
 import { describe, it, expect } from "vitest";
-import { isOverdue, formatDue } from "./date";
+import { daysLeft, isOverdue, formatDue } from "./date";
+
+describe("daysLeft", () => {
+  it("期限日当日は 0 を返す", () => {
+    expect(daysLeft("2026-07-01", "2026-07-01")).toBe(0);
+  });
+
+  it("期限日を過ぎていれば負の値を返す", () => {
+    expect(daysLeft("2026-06-29", "2026-07-01")).toBe(-2);
+  });
+
+  it("期限日が未来なら正の値を返す", () => {
+    expect(daysLeft("2026-07-05", "2026-07-01")).toBe(4);
+  });
+});
 
 describe("isOverdue", () => {
-  it("returns false when there is no due date", () => {
+  it("期限日がなければ期限切れにならない", () => {
     expect(isOverdue(null, "2026-07-01")).toBe(false);
   });
 
-  it("returns true when the due date is in the past", () => {
+  it("期限日を過ぎていれば期限切れになる", () => {
     expect(isOverdue("2026-06-30", "2026-07-01")).toBe(true);
   });
 
-  it("returns true when the due date is today", () => {
+  it("期限日当日から期限切れとして警告する", () => {
     expect(isOverdue("2026-07-01", "2026-07-01")).toBe(true);
   });
 
-  it("returns false when the due date is in the future", () => {
+  it("期限日が未来なら期限切れにならない", () => {
     expect(isOverdue("2026-07-02", "2026-07-01")).toBe(false);
   });
 });
