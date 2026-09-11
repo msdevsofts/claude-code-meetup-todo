@@ -19,8 +19,7 @@ export function daysLeft(dueDate: string, today: string = todayStr()): number {
  */
 export function isOverdue(dueDate: string | null, today: string = todayStr()): boolean {
   if (!dueDate) return false;
-  // 残り0日(=期限日当日)になった時点で警告を出したいので 0 も含める
-  return daysLeft(dueDate, today) <= 0;
+  return daysLeft(dueDate, today) < 0;
 }
 
 export function formatDue(dueDate: string | null): string {
