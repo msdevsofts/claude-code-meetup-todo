@@ -24,8 +24,8 @@ describe("isOverdue", () => {
     expect(isOverdue("2026-06-30", "2026-07-01")).toBe(true);
   });
 
-  it("期限日当日から期限切れとして警告する", () => {
-    expect(isOverdue("2026-07-01", "2026-07-01")).toBe(true);
+  it("期限日当日は期限切れにならない", () => {
+    expect(isOverdue("2026-07-01", "2026-07-01")).toBe(false);
   });
 
   it("期限日が未来なら期限切れにならない", () => {
